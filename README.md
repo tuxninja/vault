@@ -7,9 +7,9 @@ Vault is a simple command line utility for storing & retrieving AES encrypted da
 
 ### Usage 
 
-	➜  vault  python store.py --name root --text 'boobs are better than newbs' -k '01234567890987654321abcdefghijkl'
-	?;_mjd?{?j?&:x?fr????*"!?!??I??J?o?Y?? was stored as root
+	➜  vault git:(master) python store.py --name tuxlabs --text 'boobs are better than newbs' --key 01234567890987654321abcdefghijkl 
+	OYBD5YmuaBEorgFeuUjDdcR/A1fDOQxu3oFEiCTwNJPV0b0gg1StVqtn/87orx/P was stored as tuxlabs
 
-	➜  vault  python retrieve.py --name root -k '01234567890987654321abcdefghijkl'
+	➜  vault git:(master) ✗ python retrieve.py --name tuxlabs --key 01234567890987654321abcdefghijkl
 	boobs are better than newbs
-	➜  vault  
+	➜  vault git:(master) ✗ 
