@@ -1,5 +1,7 @@
 #Vault
 
+Vault is a simple command line utility for storing & retrieving AES encrypted data. 
+
 ### Clone
 	git clone https://github.com/tuxninja/vault.git
 
