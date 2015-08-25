@@ -4,6 +4,7 @@ __author__ = 'jriedel'
 
 from Crypto.Cipher import AES
 from Crypto import Random
+import base64
 import argparse 
 
 # CMD LINE OPTIONS
@@ -18,12 +19,13 @@ vaultFile = '.' + str(name)
 key = args.key
 
 
-def do_decrypt(vaultCipherText, key):
-    iv = Random.new().read(AES.block_size)
+def do_decrypt(vaultCipherText, key, BS, unpad):
+    vaultCipherText = base64.b64decode(vaultCipherText)
+    iv = Random.new().read(BS)
     cipher = AES.new(key, AES.MODE_CFB, iv)
     decryptedText = iv + cipher.decrypt(vaultCipherText)
 
-    decryptedText = decryptedText[32:]
+    decryptedText = unpad(decryptedText[32:])
 
     return decryptedText
 
@@ -35,8 +37,11 @@ def retrieve_cipherText(vaultFile):
 
 if __name__ == '__main__':
 
+    BS = 16
+    unpad = lambda s : s[:-ord(s[len(s)-1:])]
+
     vaultCipherText = retrieve_cipherText(vaultFile)
-    decryptedText = do_decrypt(vaultCipherText, key)
+    decryptedText = do_decrypt(vaultCipherText, key, BS, unpad)
 
     print "%s" % (decryptedText)
 

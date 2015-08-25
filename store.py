@@ -7,6 +7,7 @@ from Crypto import Random
 import argparse
 import os.path
 import logging
+import base64
 logging.basicConfig(level=logging.INFO)
 
 # CMD LINE OPTIONS
@@ -27,12 +28,13 @@ plainText = args.plainText
 key = args.key
 force = args.force
 
-def do_encrypt(plainText, key):
-    iv = Random.new().read(AES.block_size)
+def do_encrypt(plainText, key, BS, pad):
+    plainText = pad(plainText)
+    iv = Random.new().read(BS)
     cipher = AES.new(key, AES.MODE_CFB, iv)
     cipherText = iv + cipher.encrypt(plainText)
 
-    return cipherText
+    return base64.b64encode(cipherText)
 
 def name_check(name):
     if ' ' in name:
@@ -58,7 +60,10 @@ def store_data(cipherText):
 
 if __name__ == '__main__':
 
-    cipherText = do_encrypt(plainText, key)
+    BS = 16
+    pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
+
+    cipherText = do_encrypt(plainText, key, BS, pad)
 
     success = name_check(name)
     if success:
