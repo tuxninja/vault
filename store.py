@@ -8,6 +8,7 @@ import argparse
 import os.path
 import logging
 import base64
+import getpass
 logging.basicConfig(level=logging.INFO)
 
 # CMD LINE OPTIONS
@@ -15,7 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--name', action="store", dest="name", required=True, help="name to store the plainText under")
 parser.add_argument('-t', '--text', action="store", dest="plainText", required=True,
                     help="clear plainText plainText to store, make sure you use quotes for things with spaces.")
-parser.add_argument('-k', '--key', action="store", dest="key", required=True,
+parser.add_argument('-k', '--key', action="store", dest="key", required=False,
                     help="Specify a key 16, 24 or 32 bytes")
 parser.add_argument('-f', '--force', action="store_true", dest="force", required=False,
                     help="Overwrite an existing name stored")
@@ -59,6 +60,8 @@ def store_data(cipherText):
     print "%s was stored as %s" % (cipherText, name)
 
 if __name__ == '__main__':
+    if not key:
+        key = getpass.getpass('Key:')
 
     BS = 16
     pad = lambda s: s + (BS - len(s) % BS) * chr(BS - len(s) % BS)
